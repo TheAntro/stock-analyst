@@ -1,33 +1,14 @@
 const express = require('express');
-const axios = require('axios');
 
 // Import route files
 const local = require('./routes/local');
+const nasdaq = require('./routes/nasdaq');
 
 const app = express();
 
 // Mount routers
 app.use('/api/local', local);
-
-app.get('/nasdaq', async (req, res) => {
-  const request_config = {
-    url: 'https://www.nasdaq.com/api/v1/historical/AAPL/stocks/2020-01-20/2021-01-20',
-    headers: {
-      'Accept-Encoding': 'deflate',
-      'Connection': 'keep-alive',
-      'User-Agent': 'Script'
-    },
-    timeout: 10000
-  };
-  try {
-    const response = await axios(request_config);
-    const stock_data = response.data;
-    res.send(stock_data);
-  } catch (err) {
-    console.log(err);
-    res.send('Error');
-  }
-});
+app.use('/api/nasdaq', nasdaq);
 
 app.listen(5000, () => {
   console.log('Server listening on port 5000');
