@@ -1,14 +1,19 @@
 const express = require('express');
 const axios = require('axios');
+const {
+  readCSV,
+  parseCSV
+} = require('./utils/csv')
 
 const app = express();
 
-app.get('/', async (req, res) => {
+app.get('/nasdaq', async (req, res) => {
   const request_config = {
     url: 'https://www.nasdaq.com/api/v1/historical/AAPL/stocks/2020-01-20/2021-01-20',
     headers: {
       'Accept-Encoding': 'deflate',
-      'Connection': 'keep-alive'
+      'Connection': 'keep-alive',
+      'User-Agent': 'Script'
     },
     timeout: 10000
   };
@@ -22,6 +27,12 @@ app.get('/', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+app.get('/local/:fileURI', (req, res) => {
+  let csv = readCSV(req.params.fileURI);
+  let parsedCSV = parseCSV(csv);
+  res.json(parsedCSV);
+})
+
+app.listen(5000, () => {
+  console.log('Server listening on port 5000');
 });
