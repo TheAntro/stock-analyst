@@ -1,11 +1,13 @@
 const express = require('express');
 const axios = require('axios');
-const {
-  readCSV,
-  parseCSV
-} = require('./utils/csv')
+
+// Import route files
+const local = require('./routes/local');
 
 const app = express();
+
+// Mount routers
+app.use('/api/local', local);
 
 app.get('/nasdaq', async (req, res) => {
   const request_config = {
@@ -26,12 +28,6 @@ app.get('/nasdaq', async (req, res) => {
     res.send('Error');
   }
 });
-
-app.get('/local/:fileURI', (req, res) => {
-  let csv = readCSV(req.params.fileURI);
-  let parsedCSV = parseCSV(csv);
-  res.json(parsedCSV);
-})
 
 app.listen(5000, () => {
   console.log('Server listening on port 5000');
