@@ -1,20 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-
-/**
- * reads a CSV file and returns it in a String
- * @param {String} fileName 
- */
-exports.readCSV = function(fileName) {
-  const filePath = path.join(__dirname, '..', fileName);
-  try {
-    const data = fs.readFileSync(filePath, 'utf8');
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
 /**
  * Parses CSV from String to an array of arrays
  * @param {String} csv Content of a CSV file as a String

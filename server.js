@@ -1,4 +1,8 @@
 const express = require('express');
+const dotenv = require('dotenv');
+
+// Load environment variables
+dotenv.config({ path: './config/config.env'});
 
 // Import route files
 const local = require('./routes/local');
@@ -10,6 +14,17 @@ const app = express();
 app.use('/api/local', local);
 app.use('/api/nasdaq', nasdaq);
 
-app.listen(5000, () => {
-  console.log('Server listening on port 5000');
+// Error handler
+app.use((error, req, res, next) => {
+  if (error.code === 'ENOENT') {
+    res.status(404).json({ message: error.message });
+  } else {
+    res.status(500).json({ message: error.message });
+  }
+})
+
+// Start listening on PORT
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
