@@ -33,7 +33,8 @@ exports.parseCSVtoMap = function(csv) {
     // Assuming the MM/DD/YYYY syntax from Nasdaq's csv files, omit header and empty rows
     if (lineArray[0].length === 10) {
       let date = new Date(lineArray[0]);
-      result.set(date, {
+      // Specify the format to allow slicing through matching with similarly formatted date strings
+      result.set(date.toDateString(), {
         close: lineArray[1],
         volume: lineArray[2],
         open: lineArray[3],
