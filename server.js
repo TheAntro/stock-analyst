@@ -1,38 +1,30 @@
 const express = require('express');
-const axios = require('axios');
-const {
-  readCSV,
-  parseCSV
-} = require('./utils/csv')
+const dotenv = require('dotenv');
+
+// Load environment variables
+dotenv.config({ path: './config/config.env'});
+
+// Import route files
+const local = require('./routes/local');
+const nasdaq = require('./routes/nasdaq');
 
 const app = express();
 
-app.get('/nasdaq', async (req, res) => {
-  const request_config = {
-    url: 'https://www.nasdaq.com/api/v1/historical/AAPL/stocks/2020-01-20/2021-01-20',
-    headers: {
-      'Accept-Encoding': 'deflate',
-      'Connection': 'keep-alive',
-      'User-Agent': 'Script'
-    },
-    timeout: 10000
-  };
-  try {
-    const response = await axios(request_config);
-    const stock_data = response.data;
-    res.send(stock_data);
-  } catch (err) {
-    console.log(err);
-    res.send('Error');
-  }
-});
+// Mount routers
+app.use('/api/local', local);
+app.use('/api/nasdaq', nasdaq);
 
-app.get('/local/:fileURI', (req, res) => {
-  let csv = readCSV(req.params.fileURI);
-  let parsedCSV = parseCSV(csv);
-  res.json(parsedCSV);
+// Error handler
+app.use((error, req, res, next) => {
+  if (error.code === 'ENOENT') {
+    res.status(404).json({ message: error.message });
+  } else {
+    res.status(500).json({ message: error.message });
+  }
 })
 
-app.listen(5000, () => {
-  console.log('Server listening on port 5000');
+// Start listening on PORT
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
