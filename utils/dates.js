@@ -3,12 +3,12 @@
  * @param {String} from 
  * @param {String} to 
  */
-function dateRange(from, to) {
+const dateRange = function (from, to) {
   // Use Dates to avoid keeping track of month lengths etc. during iteration
   let startDate = new Date(from);
   let endDate = new Date(to);
 
-  let dates = [startDate];
+  let dates = [startDate.toDateString()];
   let date = new Date(startDate);
   while (date < endDate) {
     date.setDate(date.getDate() + 1);
@@ -26,7 +26,7 @@ function dateRange(from, to) {
  * @param {String} from 
  * @param {String} to 
  */
-exports.slice = function(data, from, to) {
+const slice = function(data, from, to) {
   let dates = dateRange(from, to);
   let slice = new Map();
   dates.forEach(date => {
@@ -36,3 +36,5 @@ exports.slice = function(data, from, to) {
   })
   return slice;
 }
+
+module.exports = { dateRange, slice };
