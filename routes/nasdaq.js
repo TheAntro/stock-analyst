@@ -1,8 +1,8 @@
 const express = require('express');
-const { getNasdaqData } = require('../controllers/nasdaq');
+const nasdaq = require('../controllers/nasdaq');
 
 const router = express.Router({ mergeParams: true });
 
-router.route('/:stockTicker/:from/:to').get(getNasdaqData);
+router.route('/:stockTicker/:from/:to').get(nasdaq.getAllData);
 
 module.exports = router;

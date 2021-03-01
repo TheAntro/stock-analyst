@@ -2,7 +2,7 @@
  * Parses CSV from String to an array of arrays
  * @param {String} csv Content of a CSV file as a String
  */
-exports.parseCSVtoArray = function(csv) {
+exports.toArray = function(csv) {
   //Split csv String into an array of lines
   let lines = csv.split(/\r\n|\n/);
 
@@ -27,7 +27,7 @@ exports.parseCSVtoArray = function(csv) {
  * Parses CSV from String to a Map of date strings as keys and stock data from the date in an object as values
  * @param {String} csv Content of a CSV file as a String
  */
-exports.parseCSVtoMap = function(csv) {
+exports.toMap = function(csv) {
   let lines = csv.split(/\r\n|\n/);
   let result = new Map();
 

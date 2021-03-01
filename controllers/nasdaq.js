@@ -3,7 +3,7 @@ const { requestDataFromNasdaq } = require('../services/nasdaq');
 // @desc Gets historical stock data from Nasdaq API
 // @route /api/nasdaq/:stockTicker/:from/:to
 // @access Public
-exports.getNasdaqData = async (req, res, next) => {
+exports.getAllData = async (req, res, next) => {
   // Destructure request parameters
   const { stockTicker, from, to } = req.params;
   // Get data from Nasdaq and handle response
