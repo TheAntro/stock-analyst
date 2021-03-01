@@ -26,7 +26,7 @@ function dateRange(from, to) {
  * @param {String} from 
  * @param {String} to 
  */
-exports.sliceToDates = function(data, from, to) {
+exports.datesSlice = function(data, from, to) {
   let dates = dateRange(from, to);
   let slice = new Map();
   dates.forEach(date => {
@@ -36,5 +36,3 @@ exports.sliceToDates = function(data, from, to) {
   })
   return slice;
 }
-
-exports.dateRange = dateRange

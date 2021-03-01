@@ -23,6 +23,10 @@ exports.parseCSVtoArray = function(csv) {
   return result;
 }
 
+/**
+ * Parses CSV from String to a Map of date strings as keys and stock data from the date in an object as values
+ * @param {String} csv Content of a CSV file as a String
+ */
 exports.parseCSVtoMap = function(csv) {
   let lines = csv.split(/\r\n|\n/);
   let result = new Map();

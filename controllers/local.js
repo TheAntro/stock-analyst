@@ -1,5 +1,6 @@
+const { performance } = require('perf_hooks');
 const { parseCSVtoMap } = require('../utils/csv');
-const { dateRange, sliceToDates } = require('../utils/dates');
+const { datesSlice } = require('../utils/dates');
 const { readCSV } = require('../services/local');
 
 // @desc returns all data from a stored csv file as JSON
@@ -23,25 +24,11 @@ exports.getDataBetweenDates = async (req, res, next) => {
   // Destructure request parameters
   const { fileName, from, to } = req.params;
   try {
-    const csv = await readCSV(fileName);
-    const parsedCSVMap = parseCSVtoMap(csv);
-    const dataBetweenDates = sliceToDates(parsedCSVMap, from, to);
-    const dataBetweenDatesObj = Object.fromEntries(dataBetweenDates);
-    res.status(200).json(dataBetweenDatesObj);
-  } catch (err) {
-    next(err);
-  }
-}
-
-exports.objBetweenDates = async (req, res, next) => {
-  // Destructure request parameters
-  const { fileName, from, to } = req.params;
-  try {
-    const csv = await readCSV(fileName);
-    const parsedCSVObj = parseCSVtoObj(csv);
-    const dataBetweenDates = sliceToDates(parsedCSVMap, from, to);
-    const dataBetweenDatesObj = Object.fromEntries(dataBetweenDates);
-    res.status(200).json(dataBetweenDatesObj);
+    const csv = await readCSV(fileName); // This takes 9% of execution time
+    const parsedCSVMap = parseCSVtoMap(csv); //This takes 90%
+    const dataBetweenDates = datesSlice(parsedCSVMap, from, to); // Rest takes <1%
+    const dataBetweenDatesAsObj = Object.fromEntries(dataBetweenDates);
+    res.status(200).json(dataBetweenDatesAsObj);
   } catch (err) {
     next(err);
   }

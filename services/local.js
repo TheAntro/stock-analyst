@@ -1,9 +1,5 @@
-const fs = require('fs');
+const { readFile } = require('fs').promises;
 const path = require('path');
-const util = require('util');
-
-// Make a Promise version of readFile to use async/await syntax
-const readFile = util.promisify(fs.readFile);
 
 /**
  * reads in a CSV file and returns it in a String
