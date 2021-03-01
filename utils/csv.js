@@ -2,7 +2,7 @@
  * Parses CSV from String to an array of arrays
  * @param {String} csv Content of a CSV file as a String
  */
-exports.toArray = function(csv) {
+const toArray = function(csv) {
   //Split csv String into an array of lines
   let lines = csv.split(/\r\n|\n/);
 
@@ -27,7 +27,7 @@ exports.toArray = function(csv) {
  * Parses CSV from String to a Map of date strings as keys and stock data from the date in an object as values
  * @param {String} csv Content of a CSV file as a String
  */
-exports.toMap = function(csv) {
+const toMap = function(csv) {
   let lines = csv.split(/\r\n|\n/);
   let result = new Map();
 
@@ -39,13 +39,15 @@ exports.toMap = function(csv) {
       let date = new Date(lineArray[0]);
       // Specify the format to allow slicing through matching with similarly formatted date strings
       result.set(date.toDateString(), {
-        close: lineArray[1],
-        volume: lineArray[2],
-        open: lineArray[3],
-        high: lineArray[4],
-        low: lineArray[5]
+        close: parseFloat(lineArray[1].replace(/\$/, '')),
+        volume: parseFloat(lineArray[2]),
+        open: parseFloat(lineArray[3].replace(/\$/, '')),
+        high: parseFloat(lineArray[4].replace(/\$/, '')),
+        low: parseFloat(lineArray[5].replace(/\$/, ''))
       });
     }
   });
   return result;
 }
+
+module.exports = { toArray, toMap };
