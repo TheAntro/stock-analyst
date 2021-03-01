@@ -6,13 +6,11 @@ dotenv.config({ path: './config/config.env'});
 
 // Import route files
 const local = require('./routes/local');
-const nasdaq = require('./routes/nasdaq');
 
 const app = express();
 
 // Mount routers
 app.use('/api/local', local);
-app.use('/api/nasdaq', nasdaq);
 
 // Error handler
 app.use((error, req, res, next) => {
