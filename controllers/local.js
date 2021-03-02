@@ -43,7 +43,7 @@ exports.longestBullBetweenDates = async (req, res, next) => {
   try {
     const csvData = await readCSV(fileName);
     // parse data to a date ranged Map with a pre-buffer of one stock day to facilitate analysis
-    const dataBetweenDates = csv.toDateRangedMap(csvData, from, to, 1n);
+    const dataBetweenDates = csv.toDateRangedMap(csvData, from, to, 1);
     // run analysis function to get result
     //console.log(Object.fromEntries(dataBetweenDates));
     const longestBullTrend = analysis.longestBullishTrend(dataBetweenDates);

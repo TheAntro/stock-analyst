@@ -56,32 +56,25 @@ const moveDate = function(date, delta) {
  */
 const trimDateBuffer = function(data, from, buffer) {
   let result = data;
-
   // Set start date to the day before the from date to stop iteration of buffer before it
   let startDate = new Date(from);
   startDate.setDate(startDate.getDate()-1);
-  
   // Initialize arrays to track which dates will be kept and which will be removed from result
   let removeArray = [];
   let keepArray = [];
-
   // Use iterator to go through keys of the Map one by one in order
   const keyIter = result.keys();
-
   // Get first value for iterated date before while loop to use it in the conditional
   let iteratedDate = new Date(keyIter.next().value);
-
   // First push all of the dates before the actual date range in to the keepArray
   while (iteratedDate < startDate) {
     keepArray.push(iteratedDate.toDateString());
     iteratedDate = new Date(keyIter.next().value);
   }
-
   // Then shift (to remove the days that are before the buffer) extra buffer from keepArray to removeArray
   while (keepArray.length > buffer) {
     removeArray.push(keepArray.shift());
   }
-
   // Then remove all dates in the removeArray from the result Map, leaving only the wanted buffer as extra.
   removeArray.forEach(date => result.delete(date));
   return result;
