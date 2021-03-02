@@ -7,15 +7,12 @@ const dates = require('./dates');
 const toArray = function(csv) {
   //Split csv String into an array of lines
   let lines = csv.split(/\r\n|\n/);
-
   // Create a result array and set its 0 index to be the headers array
   let result = [];
   let headers = lines[0].split(',');
   result.push(headers);
-
   // Remove headers (first line) from lines
   lines.shift();
-
   // Split rest of the csv file lines into arrays and push them into result
   lines.forEach(line => {
     lineArray = line.split(',');
@@ -30,7 +27,6 @@ const toArray = function(csv) {
       result.push(lineArray);
     }
   });
-
   return result;
 }
 
@@ -41,7 +37,6 @@ const toArray = function(csv) {
 const toMap = function(csv) {
   let lines = csv.split(/\r\n|\n/);
   let result = new Map();
-
   // Add data to Map with date as key and rest of the data as properties of an object as value
   lines.forEach(line => {
     lineArray = line.split(',');
@@ -71,11 +66,9 @@ const toMap = function(csv) {
 const toDateRangedMap = function(csv, from, to, buffer = 0) {
   let lines = csv.split(/\r\n|\n/);
   let result = new Map();
-
-  // add 10 days to the start of date range in case of weekends etc.
-  let beforeDate = new Date(dates.moveDate(from, -10));
+  // add 2*buffer (but min 5) days to the start of date range in case of weekends etc.
+  let beforeDate = new Date(dates.moveDate(from, -(Math.max(5, 2*buffer))));
   let afterDate = new Date(dates.moveDate(to, 1));
-
   // Add data to Map with date as key and rest of the data as properties of an object as value
   // Reverse the lines array to get dates into the Map in ascending order
   lines.slice().reverse().forEach(line => {

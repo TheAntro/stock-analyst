@@ -1,30 +1,22 @@
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
-const server = require('../server');
+const server = require('../../server');
 
 chai.use(chaiHttp);
 
 describe('Integration tests', function() {
   describe('GET /api/local/:filename', function() {
-    it('should respond with status 200 when provided with an existing filename', function(done) {
-      chai.request(server)
-      .get('/api/local/AAPL.csv')
-      .end(function (err, res) {
-        expect(res).to.have.status(200);
-      })
-      done();
+    it('should respond with status 200 when provided with an existing filename', async function() {
+      const res = await chai.request(server).get('/api/local/AAPL.csv');
+      expect(res).to.have.status(200);
     })
   })
 
   describe('GET /api/local/bull/:filename/:from/:to', function() {
-    it('should respond with status 200 when filename is valid', function(done) {
-      chai.request(server)
-      .get('/api/local/bull/AAPL.csv/2021-01-06/2021-01-08')
-      .end(function (err, res) {
-        expect(res).to.have.status(200);
-      })
-      done();
+    it('should respond with status 200 when filename is valid', async function() {
+      const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2021-01-06/2021-01-08');
+      expect(res).to.have.status(200);
     })
 
     /* 
@@ -44,22 +36,19 @@ describe('Integration tests', function() {
     01/08/2021, N.close > (N-1).close (132.05 > 130.92)
     Thus, to my understanding, closing price of N was higher than closing price of N-1 only 2 days in a row.
     */
-    it('should respond with the longest bullish trend between dates', function(done) {
-      chai.request(server)
-      .get('/api/local/bull/AAPL.csv/2021-01-06/2021-01-08')
-      .end(function (err, res) {
-        expect(res.body.check).to.equal(2);
-      })
-      done();
+    it('should respond with the longest bullish trend between dates', async function() {
+      const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2021-01-06/2021-01-08');
+      expect(res.body.check).to.equal(2);
     })
 
-    it('should work over gaps, e.g. when the start date is Monday and Mondays close is higher than Fridays', function(done) {
-      chai.request(server)
-      .get('/api/local/bull/AAPL.csv/2021-02-08/2021-02-10')
-      .end(function (err, res) {
-        expect(res.body.check).to.equal(1);
-      })
-      done();
+    it('should work over gaps, e.g. when the start date is Monday and Mondays close is higher than Fridays', async function() {
+      const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2021-02-08/2021-02-10');
+      expect(res.body.check).to.equal(1);
+    })
+
+    it('should handle a long date range', async function() {
+      const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2012-02-08/2021-02-10');
+      expect(res.body.success).to.equal(true);
     })
   })
 })

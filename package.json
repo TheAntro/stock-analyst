@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server",
-    "test": "mocha --exit"
+    "test": "mocha test/**/*.js --exit"
   },
   "author": "Valtteri Ranta",
   "license": "ISC",

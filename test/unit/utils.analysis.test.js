@@ -1,6 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect;
-const analysis = require('../utils/analysis');
+const analysis = require('../../utils/analysis');
 
 const data = new Map([
   ['Thu Feb 18 2021', {

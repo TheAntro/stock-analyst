@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 chai.use(require('chai-as-promised'));
-const local = require('../services/local');
+const local = require('../../services/local');
 
 describe('local services', function() {
   describe('readCSV', function() {

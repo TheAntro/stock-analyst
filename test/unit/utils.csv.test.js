@@ -1,7 +1,7 @@
 const chai = require('chai');
 const { performance } = require('perf_hooks');
 const expect = chai.expect;
-const csv = require('../utils/csv');
+const csv = require('../../utils/csv');
 
 const csvData = `Date,Close/Last,Volume,Open,High,Low
 02/24/2021,$125.35,111039900,$124.94,$125.56,$122.23
