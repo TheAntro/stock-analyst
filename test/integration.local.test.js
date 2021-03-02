@@ -52,5 +52,14 @@ describe('Integration tests', function() {
       })
       done();
     })
+
+    it('should work over gaps, e.g. when the start date is Monday and Mondays close is higher than Fridays', function(done) {
+      chai.request(server)
+      .get('/api/local/bull/AAPL.csv/2021-02-08/2021-02-10')
+      .end(function (err, res) {
+        expect(res.body.check).to.equal(1);
+      })
+      done();
+    })
   })
 })

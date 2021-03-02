@@ -64,12 +64,16 @@ const toMap = function(csv) {
 /**
  * Parses CSV from String to a Map of date strings as keys and stock data from the date in an object as values
  * @param {String} csv Content of a CSV file as a String
- * @param {String} from Starting date of the 
+ * @param {String} from Starting date of the date range
+ * @param {String} to Ending date of the date range
+ * @param {Number} buffer Optional amount of days with stock data in the beginning of the Map before start date
  */
-const toDateRangedMap = function(csv, from, to) {
+const toDateRangedMap = function(csv, from, to, buffer = 0) {
   let lines = csv.split(/\r\n|\n/);
   let result = new Map();
-  let beforeDate = new Date(dates.moveDate(from, -1));
+
+  // add 10 days to the start of date range in case of weekends etc.
+  let beforeDate = new Date(dates.moveDate(from, -10));
   let afterDate = new Date(dates.moveDate(to, 1));
 
   // Add data to Map with date as key and rest of the data as properties of an object as value
@@ -90,6 +94,9 @@ const toDateRangedMap = function(csv, from, to) {
       }
     }
   });
+
+  // Trim the buffer to right size
+  result = dates.trimDateBuffer(result, from, buffer);
   return result;
 }
 
