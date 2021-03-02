@@ -40,13 +40,12 @@ exports.getDataBetweenDates = async (req, res, next) => {
 exports.longestBullBetweenDates = async (req, res, next) => {
   // Destructure request parameters
   let { fileName, from, to } = req.params;
-  // To check price change in the first day, move start date one day back
-  from = dates.moveDate(from, -1);
   try {
     const csvData = await readCSV(fileName);
-    // parse data to a date ranged Map to facilitate analysis
-    const dataBetweenDates = csv.toDateRangedMap(csvData, from, to);
+    // parse data to a date ranged Map with a pre-buffer of one stock day to facilitate analysis
+    const dataBetweenDates = csv.toDateRangedMap(csvData, from, to, 1n);
     // run analysis function to get result
+    //console.log(Object.fromEntries(dataBetweenDates));
     const longestBullTrend = analysis.longestBullishTrend(dataBetweenDates);
     const message = `In ${fileName} stock historical data the Close/Last price increased ${longestBullTrend} days in a row between ${from} and ${to}`;
     res.status(200).json({

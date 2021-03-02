@@ -3,26 +3,12 @@ const expect = chai.expect;
 const dates = require('../utils/dates');
 
 const data = new Map([
-  ['Wed Feb 24 2021', {
-    close: 125.35,
-    volume: 111039900,
-    open: 124.94,
-    high: 125.56,
-    low: 122.23
-  }],
-  ['Tue Feb 23 2021', {
-    close: 125.86,
-    volume: 158273000,
-    open: 123.76,
-    high: 126.71,
-    low: 118.39
-  }],
-  ['Mon Feb 22 2021', {
-    close: 126,
-    volume: 103916400,
-    open: 128.01,
-    high: 129.72,
-    low: 125.6
+  ['Thu Feb 18 2021', {
+    close: 129.71,
+    volume: 96856750,
+    open: 129.2,
+    high: 129.995,
+    low: 127.41
   }],
   ['Fri Feb 19 2021', {
     close: 129.87,
@@ -31,12 +17,26 @@ const data = new Map([
     high: 130.71,
     low: 128.8
   }],
-  ['Thu Feb 18 2021', {
-    close: 129.71,
-    volume: 96856750,
-    open: 129.2,
-    high: 129.995,
-    low: 127.41
+  ['Mon Feb 22 2021', {
+    close: 126,
+    volume: 103916400,
+    open: 128.01,
+    high: 129.72,
+    low: 125.6
+  }],
+  ['Tue Feb 23 2021', {
+    close: 125.86,
+    volume: 158273000,
+    open: 123.76,
+    high: 126.71,
+    low: 118.39
+  }],
+  ['Wed Feb 24 2021', {
+    close: 125.35,
+    volume: 111039900,
+    open: 124.94,
+    high: 125.56,
+    low: 122.23
   }]
 ]);
 
@@ -101,6 +101,23 @@ describe('dates utils', function() {
       const movedDate = dates.moveDate('01/01/2021', -5);
       let expectedDate = new Date('12/27/2020');
       expect(movedDate).to.equal(expectedDate.toDateString());
+    })
+  })
+
+  describe('trimDateBuffer', function() {
+    it('should return a Map', function() {
+      const result = dates.trimDateBuffer(data, '02/22/2021', 1);
+      expect(result).to.be.a('map');
+    })
+
+    it('result should have a buffer of n days before from date', function() {
+      const result = dates.trimDateBuffer(data, '02/22/2021', 1);
+      const keyIter = result.keys();
+      let firstDate = keyIter.next().value;
+      let secondDate = keyIter.next().value;
+      let fromDate = new Date('02/22/2021').toDateString();
+      expect(firstDate).to.not.be.equal(fromDate);
+      expect(secondDate).to.be.equal(fromDate);
     })
   })
 });

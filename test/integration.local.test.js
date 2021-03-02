@@ -59,6 +59,7 @@ describe('Integration tests', function() {
       .end(function (err, res) {
         expect(res.body.check).to.equal(1);
       })
+      done();
     })
   })
 })
