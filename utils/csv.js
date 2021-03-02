@@ -1,3 +1,5 @@
+const dates = require('./dates');
+
 /**
  * Parses CSV from String to an array of arrays
  * @param {String} csv Content of a CSV file as a String
@@ -17,7 +19,16 @@ const toArray = function(csv) {
   // Split rest of the csv file lines into arrays and push them into result
   lines.forEach(line => {
     lineArray = line.split(',');
-    result.push(lineArray);
+    if (lineArray[0].length === 10) {
+      date = new Date(lineArray[0])
+      lineArray[0] = date.toDateString();
+      lineArray[1] = parseFloat(lineArray[1].replace(/\$/, '')),
+      lineArray[2] = parseFloat(lineArray[2]),
+      lineArray[3] = parseFloat(lineArray[3].replace(/\$/, '')),
+      lineArray[4] = parseFloat(lineArray[4].replace(/\$/, '')),
+      lineArray[5] = parseFloat(lineArray[5].replace(/\$/, ''))
+      result.push(lineArray);
+    }
   });
 
   return result;
@@ -50,4 +61,36 @@ const toMap = function(csv) {
   return result;
 }
 
-module.exports = { toArray, toMap };
+/**
+ * Parses CSV from String to a Map of date strings as keys and stock data from the date in an object as values
+ * @param {String} csv Content of a CSV file as a String
+ * @param {String} from Starting date of the 
+ */
+const toDateRangedMap = function(csv, from, to) {
+  let lines = csv.split(/\r\n|\n/);
+  let result = new Map();
+  let beforeDate = new Date(dates.moveDate(from, -1));
+  let afterDate = new Date(dates.moveDate(to, 1));
+
+  // Add data to Map with date as key and rest of the data as properties of an object as value
+  // Reverse the lines array to get dates into the Map in ascending order
+  lines.slice().reverse().forEach(line => {
+    lineArray = line.split(',');
+    // Assuming the MM/DD/YYYY syntax from Nasdaq's csv files, omit header and empty rows
+    if (lineArray[0].length === 10) {
+      let date = new Date(lineArray[0]);
+      if (date > beforeDate && date < afterDate) {
+        result.set(date.toDateString(), {
+          close: parseFloat(lineArray[1].replace(/\$/, '')),
+          volume: parseFloat(lineArray[2]),
+          open: parseFloat(lineArray[3].replace(/\$/, '')),
+          high: parseFloat(lineArray[4].replace(/\$/, '')),
+          low: parseFloat(lineArray[5].replace(/\$/, ''))
+        });
+      }
+    }
+  });
+  return result;
+}
+
+module.exports = { toArray, toDateRangedMap, toMap };

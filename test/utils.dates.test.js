@@ -72,4 +72,35 @@ describe('dates utils', function() {
       expect(sliced.has(excludedDate)).to.equal(false);
     })
   });
+
+  describe('moveDate', function() {
+    it('should return a string', function() {
+      const movedDate = dates.moveDate('02/22/2021', 2);
+      expect(movedDate).to.be.a('string');
+    })
+
+    it('should work moving the date forwards', function() {
+      const movedDate = dates.moveDate('02/22/2021', 2);
+      let expectedDate = new Date('02/24/2021');
+      expect(movedDate).to.equal(expectedDate.toDateString());
+    })
+
+    it('should work moving the date backwards', function() {
+      const movedDate = dates.moveDate('02/22/2021', -2);
+      let expectedDate = new Date('02/20/2021');
+      expect(movedDate).to.equal(expectedDate.toDateString());
+    })
+
+    it('should work moving over month bounds', function() {
+      const movedDate = dates.moveDate('02/28/2021', 5);
+      let expectedDate = new Date('03/05/2021');
+      expect(movedDate).to.equal(expectedDate.toDateString());
+    })
+
+    it('should work moving over year bounds', function() {
+      const movedDate = dates.moveDate('01/01/2021', -5);
+      let expectedDate = new Date('12/27/2020');
+      expect(movedDate).to.equal(expectedDate.toDateString());
+    })
+  })
 });

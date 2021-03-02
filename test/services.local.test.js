@@ -6,7 +6,7 @@ const local = require('../services/local');
 describe('local services', function() {
   describe('readCSV', function() {
     it('should return a String when provided with the name of an existing file in files folder', async () => {
-      const fileName = 'HistoricalData_1614247993646.csv';
+      const fileName = 'AAPL.csv';
       const data = await local.readCSV(fileName);
       expect(data).to.be.a('string');
     });

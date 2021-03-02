@@ -37,4 +37,15 @@ const slice = function(data, from, to) {
   return slice;
 }
 
-module.exports = { dateRange, slice };
+/**
+ * Returns a String in Date.toDateString() format that is delta days away from the provided date
+ * @param {String} date original date as a String that can be converted to Date
+ * @param {Number} delta number of days and the direction that the date should be moved
+ */
+const moveDate = function(date, delta) {
+  let movedDate = new Date(date);
+  movedDate.setDate(movedDate.getDate() + delta);
+  return movedDate.toDateString();
+}
+
+module.exports = { dateRange, slice, moveDate };

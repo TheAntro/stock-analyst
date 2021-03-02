@@ -1,13 +1,25 @@
-const dates = require('./dates');
-
 /**
- * Returns the max amount of days a stock price was increasing in a given date range
+ * Returns the max amount of days a stock price was increasing in a given set of data
  * @param {Map} data stock data with dates as keys and other data within Objects as values
- * @param {String} from start date of the date range
- * @param {String} to end date of the date range
  */
-const longestBullishTrend = function(data, from, to) {
-  let result = 0;
+const longestBullishTrend = function(data) {
+  let longestTrend = 0;
+  let currentTrend = 0;
+  let lastPrice;
+  data.forEach((value, key) => {
+    // If there was a price increase from last close to current close, increment currentTrend
+    if (lastPrice && lastPrice < value.close) {
+      currentTrend++;
+    } else {
+      // If there was no price increase, replace longestTrend with currentTrend if it was longer and reset current
+      longestTrend = Math.max(longestTrend, currentTrend);
+      currentTrend = 0;
+    }
+    lastPrice = value.close;
+  })
+
+  // If the longest trend was not cut in the data, return currentTrend, otherwise return longestTrend
+  let result = Math.max(longestTrend, currentTrend);
   return result;
 }
 
