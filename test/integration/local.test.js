@@ -65,7 +65,7 @@ describe('Integration tests', function() {
         if (previous.date) {
           expect(date.volume <= previous.volume).to.equal(true);
           if (date.volume === previous.volume) {
-            expect(date.priceChange <= previous.priceChange);
+            expect(date.priceChange <= previous.priceChange).to.equal(true);
           }
         }
         previous = Object.assign({}, date);
