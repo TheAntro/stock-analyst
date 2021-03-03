@@ -56,6 +56,9 @@ exports.longestBullBetweenDates = async (req, res, next) => {
   }
 }
 
+// @desc returns list of dates, volumes, and price changes, ordered by volume first, price change second
+// @route GET /api/local/sort/:filename/:from/:to
+// @access Public
 exports.descendingVolumeAndPriceChange = async (req, res, next) => {
   let { filename, from, to } = req.params;
   try {
@@ -66,6 +69,25 @@ exports.descendingVolumeAndPriceChange = async (req, res, next) => {
       success: true,
       data: orderedData
     });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// @desc returns list of dates and price change percentages between opening price and the SMA 5 price of the day, ordered by percentage change
+// @route GET /api/local/sma5/:filename/:from/:to
+// @access Public
+exports.bestOpeningPrice = async (req, res, next) => {
+  let { filename, from, to } = req.params;
+  try {
+    const csvData = await readCSV(filename);
+    // parse to Map with a buffer of 5 days to get the SMA 5 for the first day in date range.
+    const dataBetweenDates = csv.toDateRangedMap(csvData, from, to, 5);
+    const bestOpeningPrices = analysis.bestOpeningPriceSMA5(dataBetweenDates);
+    res.status(200).json({
+      success: true,
+      data: bestOpeningPrices
+    })
   } catch (err) {
     next(err);
   }

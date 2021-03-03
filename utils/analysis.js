@@ -54,4 +54,48 @@ const descendingVolumeAndPriceChange = function(data) {
   return result;
 }
 
-module.exports = { longestBullishTrend, descendingVolumeAndPriceChange };
+/**
+ * Returns an Array of Objects with date and priceChangePercentage properties
+ * ordered in descending order by priceChangePercentages
+ * @param {Map} data A Map with date strings as keys, and Objects with at least volume, 
+ * high and low properties as values.
+ */
+const bestOpeningPriceSMA5 = function(data) {
+  let result = [];
+  let sma5Prices = [];
+  let sma5;
+  let change;
+  data.forEach((value, key) => {
+    // Initialize SMA 5 before starting analysis
+    if (sma5Prices.length !== 5) {
+      sma5Prices.push(value.close);
+    } else {
+      // Start analysis when SMA5 can be calculated
+      sma5 = sma(sma5Prices);
+      change = (value.open - sma5) / sma5 * 100;
+      result.push({
+        date: key,
+        // To remove rounding errors from, toFixed to 4 decimals and convert back to number with parseFloat
+        priceChangePercentage: parseFloat(change.toFixed(4))
+      })
+      // Update sma5 array:
+      sma5Prices.shift();
+      sma5Prices.push(value.close);
+    }
+  })
+  // Sort to descending order by priceChangePercentage
+  result.sort((date1, date2) => date2.priceChangePercentage - date1.priceChangePercentage);
+  return result;
+}
+
+/**
+ * Returns the average of the numbers in the array
+ * @param {Array} openingPrices Array of opening prices in number format from n number of days
+ */
+const sma = function(openingPrices) {
+  const sum = openingPrices.reduce((price1, price2) => price1 + price2);
+  const avg =  sum/openingPrices.length;
+  return avg;
+}
+
+module.exports = { longestBullishTrend, descendingVolumeAndPriceChange, bestOpeningPriceSMA5, sma };

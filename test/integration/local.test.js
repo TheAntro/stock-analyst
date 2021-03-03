@@ -58,7 +58,7 @@ describe('Integration tests', function() {
       expect(res).to.have.status(200);
     });
 
-    it('Should return list of dates, volumes and price changes in descending order by volume first, price change second', async function() {
+    it('should return list of dates, volumes and price changes in descending order by volume first, price change second', async function() {
       const res = await chai.request(server).get('/api/local/sort/AAPL.csv/2020-01-06/2021-01-08');
       let previous = {};
       res.body.data.forEach(date => {
@@ -67,6 +67,24 @@ describe('Integration tests', function() {
           if (date.volume === previous.volume) {
             expect(date.priceChange <= previous.priceChange).to.equal(true);
           }
+        }
+        previous = Object.assign({}, date);
+      });
+    });
+  });
+
+  describe('GET /api/local/sma5/:filename/:from/:to', function() {
+    it('should resond with status 200 when filename is valid', async function() {
+      const res = await chai.request(server).get('/api/local/sma5/AAPL.csv/2021-01-06/2021-01-08');
+      expect(res).to.have.status(200);
+    });
+
+    it('should return list of dates and price change percentages on open, ordered by the price change %', async function() {
+      const res = await chai.request(server).get('/api/local/sma5/AAPL.csv/2020-01-06/2021-01-08');
+      let previous = {};
+      res.body.data.forEach(date => {
+        if (previous.date) {
+          expect(date.priceChangePercentage <= previous.priceChangePercentage).to.equal(true);
         }
         previous = Object.assign({}, date);
       });
