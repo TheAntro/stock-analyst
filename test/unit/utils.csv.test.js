@@ -111,10 +111,24 @@ describe('CSV Utils', function() {
       expect(data.low).to.equal(122.23);
     })
 
-    it('should not contain dates outside of the given range', function() {
+    it('should not contain dates outside of the given range if no buffer is passed', function() {
       const result = csv.toDateRangedMap(csvData, '02/22/2021', '02/24/2021');
       let date = new Date('02/19/2021').toDateString();
       expect(result.has(date)).to.equal(false);
     })
+
+    it('should have buffer amount of days extra at the beginning if buffer is passed', function() {
+      const result = csv.toDateRangedMap(csvData, '02/22/2021', '02/24/2021', 2);
+      let keyIter = result.keys();
+      let firstDate = keyIter.next().value;
+      let secondDate = keyIter.next().value;
+      let thirdDate = keyIter.next().value;
+      let expectedFirstDate = new Date('02/18/2021').toDateString();
+      let expectedSecondDate = new Date('02/19/2021').toDateString();
+      let expectedThirdDate = new Date('02/22/2021').toDateString();
+      expect(firstDate).to.equal(expectedFirstDate);
+      expect(secondDate).to.equal(expectedSecondDate);
+      expect(thirdDate).to.equal(expectedThirdDate);
+    });
   });
 });

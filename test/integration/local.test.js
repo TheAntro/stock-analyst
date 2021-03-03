@@ -17,7 +17,7 @@ describe('Integration tests', function() {
     it('should respond with status 200 when filename is valid', async function() {
       const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2021-01-06/2021-01-08');
       expect(res).to.have.status(200);
-    })
+    });
 
     /* 
     A bit of confusion about the definition of an upward trend
@@ -39,16 +39,37 @@ describe('Integration tests', function() {
     it('should respond with the longest bullish trend between dates', async function() {
       const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2021-01-06/2021-01-08');
       expect(res.body.check).to.equal(2);
-    })
+    });
 
     it('should work over gaps, e.g. when the start date is Monday and Mondays close is higher than Fridays', async function() {
       const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2021-02-08/2021-02-10');
       expect(res.body.check).to.equal(1);
-    })
+    });
 
     it('should handle a long date range', async function() {
       const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2012-02-08/2021-02-10');
       expect(res.body.success).to.equal(true);
-    })
-  })
-})
+    });
+  });
+
+  describe('GET /api/local/sort/:filename/:from/:to', function() {
+    it('should respond with status 200 when filename is valid', async function() {
+      const res = await chai.request(server).get('/api/local/sort/AAPL.csv/2021-01-06/2021-01-08');
+      expect(res).to.have.status(200);
+    });
+
+    it('Should return list of dates, volumes and price changes in descending order by volume first, price change second', async function() {
+      const res = await chai.request(server).get('/api/local/sort/AAPL.csv/2020-01-06/2021-01-08');
+      let previous = {};
+      res.body.data.forEach(date => {
+        if (previous.date) {
+          expect(date.volume <= previous.volume).to.equal(true);
+          if (date.volume === previous.volume) {
+            expect(date.priceChange <= previous.priceChange).to.equal(true);
+          }
+        }
+        previous = Object.assign({}, date);
+      });
+    });
+  });
+});

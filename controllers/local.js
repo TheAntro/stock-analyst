@@ -58,4 +58,19 @@ exports.longestBullBetweenDates = async (req, res, next) => {
   }
 }
 
+exports.descendingVolumeAndPriceChange = async (req, res, next) => {
+  let { filename, from, to } = req.params;
+  try {
+    const csvData = await readCSV(filename);
+    const dataBetweenDates = csv.toDateRangedMap(csvData, from, to);
+    const orderedArray = analysis.descendingVolumeAndPriceChange(dataBetweenDates);
+    res.status(200).json({
+      success: true,
+      data: orderedArray
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 
