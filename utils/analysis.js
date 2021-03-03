@@ -6,7 +6,7 @@ const longestBullishTrend = function(data) {
   let longestTrend = 0;
   let currentTrend = 0;
   let lastPrice;
-  data.forEach((value, key) => {
+  data.forEach((value) => {
     // If there was a price increase from last close to current close, increment currentTrend
     if (lastPrice && lastPrice < value.close) {
       currentTrend++;
@@ -23,6 +23,12 @@ const longestBullishTrend = function(data) {
   return result;
 }
 
+/**
+ * Returns an Array of Objects with date, volume, and priceChange properties,
+ * ordered in descending order by volume, and if volumes are equal, by priceChange.
+ * @param {Map} data A Map with date strings as keys, and Objects with at least volume, 
+ * high and low properties as values.
+ */
 const descendingVolumeAndPriceChange = function(data) {
   let result = [];
   data.forEach((value, key) => {

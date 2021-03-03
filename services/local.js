@@ -3,10 +3,10 @@ const path = require('path');
 
 /**
  * reads in a CSV file and returns it in a String
- * @param {String} fileName 
+ * @param {String} filename 
  */
-exports.readCSV = async function(fileName) {
-  const filePath = path.join(__dirname, '..', 'files', fileName);
+exports.readCSV = async function(filename) {
+  const filePath = path.join(__dirname, '..', 'files', filename);
   const data =  await readFile(filePath, 'utf8');
   return data;
 }

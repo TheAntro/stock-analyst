@@ -1,8 +1,6 @@
 const path = require('path');
 const csv = require('../utils/csv');
-const dates = require('../utils/dates');
 const analysis = require('../utils/analysis');
-const { performance } = require('perf_hooks');
 const { readCSV } = require('../services/local');
 
 // @desc returns all data from a stored csv file as JSON
@@ -50,8 +48,8 @@ exports.longestBullBetweenDates = async (req, res, next) => {
     const message = `In ${path.parse(filename).name} stock historical data the Close/Last price increased ${longestBullTrend} days in a row between ${from} and ${to}`;
     res.status(200).json({
       success: true,
-      result: message,
-      check: longestBullTrend // for tests
+      text: message,
+      data: longestBullTrend
     });
   } catch (err) {
     next(err);
@@ -63,10 +61,10 @@ exports.descendingVolumeAndPriceChange = async (req, res, next) => {
   try {
     const csvData = await readCSV(filename);
     const dataBetweenDates = csv.toDateRangedMap(csvData, from, to);
-    const orderedArray = analysis.descendingVolumeAndPriceChange(dataBetweenDates);
+    const orderedData = analysis.descendingVolumeAndPriceChange(dataBetweenDates);
     res.status(200).json({
       success: true,
-      data: orderedArray
+      data: orderedData
     });
   } catch (err) {
     next(err);

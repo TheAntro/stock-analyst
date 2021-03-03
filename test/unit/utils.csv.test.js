@@ -1,5 +1,4 @@
 const chai = require('chai');
-const { performance } = require('perf_hooks');
 const expect = chai.expect;
 const csv = require('../../utils/csv');
 

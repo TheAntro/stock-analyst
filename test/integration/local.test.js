@@ -38,12 +38,12 @@ describe('Integration tests', function() {
     */
     it('should respond with the longest bullish trend between dates', async function() {
       const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2021-01-06/2021-01-08');
-      expect(res.body.check).to.equal(2);
+      expect(res.body.data).to.equal(2);
     });
 
     it('should work over gaps, e.g. when the start date is Monday and Mondays close is higher than Fridays', async function() {
       const res = await chai.request(server).get('/api/local/bull/AAPL.csv/2021-02-08/2021-02-10');
-      expect(res.body.check).to.equal(1);
+      expect(res.body.data).to.equal(1);
     });
 
     it('should handle a long date range', async function() {
