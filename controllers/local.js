@@ -27,14 +27,23 @@ exports.longestBullBetweenDates = async (req, res, next) => {
     const csvData = await readCSV(filename);
     // parse data to a date ranged Map with a pre-buffer of one stock day to facilitate analysis
     const dataBetweenDates = csv.toDateRangedMap(csvData, from, to, 1);
-    // run analysis function to get result
-    const longestBullTrend = analysis.longestBullishTrend(dataBetweenDates);
-    const message = `In ${path.parse(filename).name} stock historical data the Close/Last price increased ${longestBullTrend} days in a row between ${from} and ${to}`;
-    res.status(200).json({
-      success: true,
-      text: message,
-      data: longestBullTrend
-    });
+    if (dataBetweenDates.size == 0) {
+      res.status(404).json({
+        success: false,
+        message: 'The provide date range is at least partly outside ' +
+                 'of the content of the provided csv file, or there is ' +
+                 'not enough data before the starting date to complete analysis'
+      })
+    } else {
+      // run analysis function to get result
+      const longestBullTrend = analysis.longestBullishTrend(dataBetweenDates);
+      const message = `In ${path.parse(filename).name} stock historical data the Close/Last price increased ${longestBullTrend} days in a row between ${from} and ${to}`;
+      res.status(200).json({
+        success: true,
+        message: message,
+        data: longestBullTrend
+      });
+    }
   } catch (err) {
     next(err);
   }
@@ -48,11 +57,20 @@ exports.descendingVolumeAndPriceChange = async (req, res, next) => {
   try {
     const csvData = await readCSV(filename);
     const dataBetweenDates = csv.toDateRangedMap(csvData, from, to);
-    const orderedData = analysis.descendingVolumeAndPriceChange(dataBetweenDates);
-    res.status(200).json({
-      success: true,
-      data: orderedData
-    });
+    if (dataBetweenDates.size == 0) {
+      res.status(404).json({
+        success: false,
+        message: 'The provide date range is at least partly outside ' +
+                 'of the content of the provided csv file, or there is ' +
+                 'not enough data before the starting date to complete analysis'
+      })
+    } else {
+      const orderedData = analysis.descendingVolumeAndPriceChange(dataBetweenDates);
+      res.status(200).json({
+        success: true,
+        data: orderedData
+      });
+    }
   } catch (err) {
     next(err);
   }
@@ -67,11 +85,20 @@ exports.bestOpeningPrice = async (req, res, next) => {
     const csvData = await readCSV(filename);
     // parse to Map with a buffer of 5 days to get the SMA 5 for the first day in date range.
     const dataBetweenDates = csv.toDateRangedMap(csvData, from, to, 5);
-    const bestOpeningPrices = analysis.bestOpeningPriceSMA5(dataBetweenDates);
-    res.status(200).json({
-      success: true,
-      data: bestOpeningPrices
-    })
+    if (dataBetweenDates.size == 0) {
+      res.status(404).json({
+        success: false,
+        message: 'The provide date range is at least partly outside ' +
+                 'of the content of the provided csv file, or there is ' +
+                 'not enough data before the starting date to complete analysis'
+      })
+    } else {
+      const bestOpeningPrices = analysis.bestOpeningPriceSMA5(dataBetweenDates);
+      res.status(200).json({
+        success: true,
+        data: bestOpeningPrices
+      })
+  }
   } catch (err) {
     next(err);
   }

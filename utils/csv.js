@@ -60,7 +60,13 @@ const toDateRangedMap = function(csv, from, to, buffer = 0) {
 
   // Trim the buffer to right size
   result = dates.trimDateBuffer(result, from, buffer);
-  return result;
+  // Ensure that result contains more than dates from the buffer to prevent showing result from eg. the future
+  // If not, return an empty Map
+  if (result.size > buffer) {
+    return result
+  } else {
+    return new Map();
+  }
 }
 
 module.exports = { toDateRangedMap, toMap };
