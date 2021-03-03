@@ -1,43 +1,4 @@
 /**
- * Creates an Array of Dates between from and to, supplied as Strings.
- * @param {String} from 
- * @param {String} to 
- */
-const dateRange = function (from, to) {
-  // Use Dates to avoid keeping track of month lengths etc. during iteration
-  let startDate = new Date(from);
-  let endDate = new Date(to);
-
-  let dates = [startDate.toDateString()];
-  let date = new Date(startDate);
-  while (date < endDate) {
-    date.setDate(date.getDate() + 1);
-    let tmpDate = new Date(date)
-    // Turn Dates into strings to allow matching with Map keys or Object properties
-    let stringDate = tmpDate.toDateString();
-    dates.push(stringDate);
-  }
-  return dates
-}
-
-/**
- * 
- * @param {Map} data 
- * @param {String} from 
- * @param {String} to 
- */
-const slice = function(data, from, to) {
-  let dates = dateRange(from, to);
-  let slice = new Map();
-  dates.forEach(date => {
-    if (data.has(date)) {
-      slice.set(date, data.get(date));
-    }
-  })
-  return slice;
-}
-
-/**
  * Returns a String in Date.toDateString() format that is delta days away from the provided date
  * @param {String} date original date as a String that can be converted to Date
  * @param {Number} delta number of days and the direction that the date should be moved
@@ -80,4 +41,4 @@ const trimDateBuffer = function(data, from, buffer) {
   return result;
 }
 
-module.exports = { dateRange, slice, moveDate, trimDateBuffer };
+module.exports = { moveDate, trimDateBuffer };

@@ -1,36 +1,6 @@
 const dates = require('./dates');
 
 /**
- * Parses CSV from String to an array of arrays
- * @param {String} csv Content of a CSV file as a String
- */
-const toArray = function(csv) {
-  //Split csv String into an array of lines
-  let lines = csv.split(/\r\n|\n/);
-  // Create a result array and set its 0 index to be the headers array
-  let result = [];
-  let headers = lines[0].split(',');
-  result.push(headers);
-  // Remove headers (first line) from lines
-  lines.shift();
-  // Split rest of the csv file lines into arrays and push them into result
-  lines.forEach(line => {
-    lineArray = line.split(',');
-    if (lineArray[0].length === 10) {
-      date = new Date(lineArray[0])
-      lineArray[0] = date.toDateString();
-      lineArray[1] = parseFloat(lineArray[1].replace(/\$/, '')),
-      lineArray[2] = parseFloat(lineArray[2]),
-      lineArray[3] = parseFloat(lineArray[3].replace(/\$/, '')),
-      lineArray[4] = parseFloat(lineArray[4].replace(/\$/, '')),
-      lineArray[5] = parseFloat(lineArray[5].replace(/\$/, ''))
-      result.push(lineArray);
-    }
-  });
-  return result;
-}
-
-/**
  * Parses CSV from String to a Map of date strings as keys and stock data from the date in an object as values
  * @param {String} csv Content of a CSV file as a String
  */
@@ -93,4 +63,4 @@ const toDateRangedMap = function(csv, from, to, buffer = 0) {
   return result;
 }
 
-module.exports = { toArray, toDateRangedMap, toMap };
+module.exports = { toDateRangedMap, toMap };

@@ -10,8 +10,8 @@ describe('Integration tests', function() {
     it('should respond with status 200 when provided with an existing filename', async function() {
       const res = await chai.request(server).get('/api/local/AAPL.csv');
       expect(res).to.have.status(200);
-    })
-  })
+    });
+  });
 
   describe('GET /api/local/bull/:filename/:from/:to', function() {
     it('should respond with status 200 when filename is valid', async function() {
