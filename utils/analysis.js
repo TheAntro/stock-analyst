@@ -23,4 +23,29 @@ const longestBullishTrend = function(data) {
   return result;
 }
 
-module.exports = { longestBullishTrend };
+const descendingVolumeAndPriceChange = function(data) {
+  let result = [];
+  data.forEach((value, key) => {
+    result.push({
+      date: key,
+      volume: value.volume,
+      // Math.abs to get the absolute value (pos/neg changes both as significant), 
+      // toFixed to remove rounding errors resulting from floating point calculations (returns a string),
+      // parseFloat to revert back to number for sorting.
+      priceChange: parseFloat(Math.abs(value.high - value.low).toFixed(4))
+    });
+  })
+
+  result.sort((date1, date2) => {
+    // First sort by volume in descending order
+    if (date1.volume > date2.volume) return -1;
+    if (date1.volume < date2.volume) return 1;
+
+    // If volumes were equal, sort in descending order by price change
+    if (date1.priceChange > date2.priceChange) return -1;
+    if (date1.priceChange < date2.priceChange) return 1;
+  })
+  return result;
+}
+
+module.exports = { longestBullishTrend, descendingVolumeAndPriceChange };
