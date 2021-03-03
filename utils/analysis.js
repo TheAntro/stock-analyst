@@ -78,6 +78,9 @@ const bestOpeningPriceSMA5 = function(data) {
         // To remove rounding errors from, toFixed to 4 decimals and convert back to number with parseFloat
         priceChangePercentage: parseFloat(change.toFixed(4))
       })
+      // Update sma5 array:
+      sma5Prices.shift();
+      sma5Prices.push(value.close);
     }
   })
   // Sort to descending order by priceChangePercentage

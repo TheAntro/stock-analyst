@@ -121,6 +121,12 @@ describe('Analysis utils', function() {
         previous = Object.assign({}, date);
       });
     });
+
+    it('should accurately analyse price changes', function() {
+      const result = analysis.descendingVolumeAndPriceChange(data);
+      const date = result[0];
+      expect(date.priceChange).to.equal(8.32);
+    })
   });
 
   describe('bestOpeningPriceSMA5', function() {
@@ -151,10 +157,17 @@ describe('Analysis utils', function() {
         previous = Object.assign({}, date);
       });
     });
+
+    it('should accurately analyse price change percentages', function() {
+      const result = analysis.bestOpeningPriceSMA5(data);
+      expect(result[0].date).to.equal('Fri Feb 19 2021');
+      expect(result[0].priceChangePercentage).to.equal(-1.9631);
+    })
+
   });
 
   describe('sma', function() {
-    it('should return a number', function() {
+    it('should return the average of an array of numbers', function() {
       const testArray1 = [1,2,3];
       const testArray2 = [1,2,3,4,5];
       const result1 = analysis.sma(testArray1);
