@@ -30,9 +30,10 @@ exports.longestBullBetweenDates = async (req, res, next) => {
     if (dataBetweenDates.size == 0) {
       res.status(404).json({
         success: false,
-        message: 'The provide date range is at least partly outside ' +
+        message: 'The provided date range is at least partly outside ' +
                  'of the content of the provided csv file, or there is ' +
-                 'not enough data before the starting date to complete analysis'
+                 'not enough data before the starting date to complete analysis,' +
+                 'or the provided starting date is after the provided ending date of the analysis'
       })
     } else {
       // run analysis function to get result
@@ -60,9 +61,10 @@ exports.descendingVolumeAndPriceChange = async (req, res, next) => {
     if (dataBetweenDates.size == 0) {
       res.status(404).json({
         success: false,
-        message: 'The provide date range is at least partly outside ' +
+        message: 'The provided date range is at least partly outside ' +
                  'of the content of the provided csv file, or there is ' +
-                 'not enough data before the starting date to complete analysis'
+                 'not enough data before the starting date to complete analysis,' +
+                 'or the provided starting date is after the provided ending date of the analysis'
       })
     } else {
       const orderedData = analysis.descendingVolumeAndPriceChange(dataBetweenDates);
@@ -88,9 +90,10 @@ exports.bestOpeningPrice = async (req, res, next) => {
     if (dataBetweenDates.size == 0) {
       res.status(404).json({
         success: false,
-        message: 'The provide date range is at least partly outside ' +
+        message: 'The provided date range is at least partly outside ' +
                  'of the content of the provided csv file, or there is ' +
-                 'not enough data before the starting date to complete analysis'
+                 'not enough data before the starting date to complete analysis, ' +
+                 'or the provided starting date is after the provided ending date of the analysis'
       })
     } else {
       const bestOpeningPrices = analysis.bestOpeningPriceSMA5(dataBetweenDates);
