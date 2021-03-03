@@ -79,7 +79,7 @@ describe('Integration tests', function() {
       expect(res).to.have.status(200);
     });
 
-    it('should return list of dates and price change percentages ordered by the price change %', async function() {
+    it('should return list of dates and price change percentages on open, ordered by the price change %', async function() {
       const res = await chai.request(server).get('/api/local/sma5/AAPL.csv/2020-01-06/2021-01-08');
       let previous = {};
       res.body.data.forEach(date => {

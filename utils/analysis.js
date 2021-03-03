@@ -54,4 +54,9 @@ const descendingVolumeAndPriceChange = function(data) {
   return result;
 }
 
-module.exports = { longestBullishTrend, descendingVolumeAndPriceChange };
+const bestOpeningPriceSMA5 = function(data) {
+  let result = [];
+  return result;
+}
+
+module.exports = { longestBullishTrend, descendingVolumeAndPriceChange, bestOpeningPriceSMA5 };
